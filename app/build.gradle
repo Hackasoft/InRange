@@ -18,28 +18,28 @@ android {
         }
     }
 
-    signingConfigs {
-        release {
-            storeFile file("C:\\Hackasoft\\InRange\\hack_keystore.keystore")
-            storePassword "android"
-            keyAlias "hack"
-            keyPassword "android"
-        }
-        debug {
-            storeFile file("C:\\Hackasoft\\InRange\\hack_keystore.keystore")
-            storePassword "android"
-            keyAlias "hack"
-            keyPassword "android"
-        }
+//    signingConfigs {
+//        release {
+//            storeFile file("C:\\Hackasoft\\InRange\\hack.keystore")
+//            storePassword "android"
+//            keyAlias "hack"
+//            keyPassword "android"
+//        }
+//        debug {
+//            storeFile file("C:\\Hackasoft\\InRange\\hack.keystore")
+//            storePassword "android"
+//            keyAlias "hack"
+//            keyPassword "android"
+//        }
+//    }
+//        buildTypes {
+//            release {
+//                minifyEnabled false
+////                signingConfig signingConfigs.release
+//                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+//            }
+//        }
 
-        buildTypes {
-            release {
-                minifyEnabled false
-                signingConfig signingConfigs.release
-                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            }
-        }
-    }
 }
 
 dependencies {
