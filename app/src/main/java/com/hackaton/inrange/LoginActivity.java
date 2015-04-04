@@ -373,6 +373,8 @@ public class LoginActivity extends Activity implements OnClickListener,
         Intent startMainActivity = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(startMainActivity);
 
+        finish();
+
     }
 
     /**
