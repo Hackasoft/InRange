@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="names">
+        <item> Hackaton </item>
+        <item> Food festival </item>
+        <item> Rock concert </item>
+        <item> Theater drama </item>
+        <item> Book presentation </item>
+    </string-array>
+
+    <string-array name="descriptions">
+        <item> Mobi dev </item>
+        <item> Sushi </item>
+        <item> Pink Floyd in Kiev!! </item>
+        <item> Some text </item>
+        <item> Book 6 "ice and fire" </item>
+    </string-array>
+
+    <string-array name= "date">
+        <item> today </item>
+        <item> tomorrow </item>
+        <item> 06.04.2015 </item>
+        <item> monday next week </item>
+        <item> 30.04.2019 </item>
+    </string-array>
+
+    <string-array name= "places">
+        <item> Donskaya str. 4A </item>
+        <item> Peremogi avn. 34 </item>
+        <item> Explanadna str. 1 </item>
+        <item> Lvovska str. 321 </item>
+        <item> Lounge avn. 123 </item>
+    </string-array>
+</resources>
