@@ -3,31 +3,37 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="3dp"
+    android:paddingRight="3dp"
+    android:paddingTop="7dp"
+    android:paddingBottom="7dp"
     android:minHeight="?android:attr/listPreferredItemHeight">
 
+    <!--android:minHeight="?android:attr/listPreferredItemHeight"-->
+
     <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_width="70dp"
+        android:layout_height="fill_parent">
 
         <ImageView
             android:id="@+id/event_pic_list_item_imageview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
 
     </FrameLayout>
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="5"
+        android:padding="3dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/event_name_list_item_textview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceMedium"/>
 
         <TextView
             android:id="@+id/event_short_description_list_item_textview"
@@ -41,12 +47,14 @@
 
             <TextView
                 android:id="@+id/event_date_list_item_textview"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/event_distance_list_item_textview"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>

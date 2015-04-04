@@ -68,6 +68,11 @@ class Event {
         this.setLocation(location);
     }
 
+    @Override
+    public String toString() {
+        return getName() + '\n' + getDate() + '\n' + getLocation();
+    }
+
     public String getName() {
         return name;
     }

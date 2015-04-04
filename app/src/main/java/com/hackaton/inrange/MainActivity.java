@@ -1,10 +1,15 @@
 package com.hackaton.inrange;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -41,6 +46,17 @@ public class MainActivity extends ActionBarActivity {
                     locations[i]
             ));
         }
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                ArrayList<String> sendDataInArray = new ArrayList<String>(4);
+//                String[] arrPassData = parent.getSelectedItem().toString();
+                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+                intent.putExtra("passData", mListView.getAdapter().getItem(position).toString());
+                startActivity(intent);
+            }
+        });
     }
 
 
