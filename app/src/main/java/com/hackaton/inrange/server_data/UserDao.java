@@ -1,6 +1,7 @@
 package com.hackaton.inrange.server_data;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -36,6 +37,7 @@ public class UserDao {
         }
         if (list.size()>0) return;
         ParseObject z = new ParseObject(UserClassName);
+        Log.d("ran","good1");
         z.put(UserID,a.getId());
         z.put(UserName,a.getName());
         z.put(UserLastName,a.getLastName());
@@ -44,6 +46,7 @@ public class UserDao {
         z.put(UserLatitude,a.getUserLatitude());
         z.put(UserLongitude,a.getUserLongitude());
         z.saveInBackground();
+        Log.d("ran","good2");
    //     z.put(UserID);
     }
 

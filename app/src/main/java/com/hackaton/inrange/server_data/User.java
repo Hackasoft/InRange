@@ -23,6 +23,8 @@ public class User {
         this.lastName = lastName;
         this.male = male;
         this.age = age;
+        userLatitude = "";
+        userLongitude = "";
     }
 
     public String getId() {
