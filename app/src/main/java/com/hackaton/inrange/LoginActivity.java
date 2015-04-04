@@ -26,7 +26,6 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.Plus.PlusOptions;
 import com.google.android.gms.plus.PlusShare;
@@ -75,11 +74,26 @@ public class LoginActivity extends Activity implements OnClickListener,
     // Google Play services
     private ConnectionResult mConnectionResult;
 
+
+    @Override
+
+    protected void onSaveInstanceState(Bundle state) {
+
+        super.onSaveInstanceState(state);
+
+        state.putSerializable("StatusAuth", mConnectionResult.toString());
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
+
+
+
         signOutButton = (Button) findViewById(R.id.sign_out_button);
         signOutButton.setOnClickListener(this);
         userInfoButton = (Button) findViewById(R.id.show_userinfo_button);
@@ -102,6 +116,18 @@ public class LoginActivity extends Activity implements OnClickListener,
 
         // Initializing google plus api client
         mGoogleApiClient = buildGoogleAPIClient();
+
+        if (mGoogleApiClient.isConnected()) {
+            //StartActivity
+            // startTime = (Calendar) savedInstanceState.getSerializable("starttime");
+            // After succsesful sign in go to MainActivity
+            Intent startMainActivity = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(startMainActivity);
+            // Destroy current login activity
+
+            finish();
+
+        }
     }
 
 
@@ -370,8 +396,12 @@ public class LoginActivity extends Activity implements OnClickListener,
 
         processUIUpdate(true);
 
+        // After succsesful sign in go to MainActivity
         Intent startMainActivity = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(startMainActivity);
+        // Destroy current login activity
+
+        finish();
 
     }
 
