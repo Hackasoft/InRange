@@ -4,6 +4,8 @@ import android.app.Application;
 import android.test.ApplicationTestCase;
 import android.util.Log;
 
+import com.hackaton.inrange.server_data.User;
+import com.hackaton.inrange.server_data.UserDao;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -25,13 +27,14 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public void testParse()
     {
 
-        ParseObject gameScore = new ParseObject("GameScore2");
+       /* ParseObject gameScore = new ParseObject("GameScore2");
         gameScore.put("score", 1337);
         gameScore.put("playerName", "Sean Plott");
         gameScore.put("cheatMode", false);
         String id = gameScore.getObjectId();
         gameScore.saveInBackground();
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("GameScore2");
+       */
+        /*ParseQuery<ParseObject> query = ParseQuery.getQuery("GameScore2");
         query.whereEqualTo("playerName", "Sean Plott");
         List<ParseObject> list = new ArrayList<ParseObject>();
         try {
@@ -51,6 +54,27 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
             }
         });
         if (list.size()!=0)  Assert.assertEquals(list.get(0).getInt("score"),1337);
-        else Assert.assertFalse(true);
+        else Assert.assertFalse(true);*/
+        User a = new User("12333","qwewqe","bhjgads",true,22);
+        UserDao.addUser(a);
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(UserDao.UserClassName);
+       // query.whereEqualTo("playerName", "Sean Plott");
+        List<ParseObject> list = new ArrayList<ParseObject>();
+        try {
+            list = query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Log.d("UserDao_add","After1"+list.size());
+        UserDao.addUser(a);
+        query = ParseQuery.getQuery(UserDao.UserClassName);
+       // query.whereEqualTo("playerName", "Sean Plott");
+      //  List<ParseObject> list = new ArrayList<ParseObject>();
+        try {
+            list = query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Log.d("UserDao_add","After2"+list.size());
     }
 }

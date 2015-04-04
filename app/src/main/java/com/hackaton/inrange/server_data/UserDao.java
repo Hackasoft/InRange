@@ -4,7 +4,11 @@ import android.os.AsyncTask;
 
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import bolts.Task;
 
@@ -22,6 +26,15 @@ public class UserDao {
     public final static String UserLongitude = "UserLongitude";
     public static void addUser(User a)
     {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(UserClassName);
+        query.whereEqualTo(UserID, a.getId());
+        List<ParseObject> list = new ArrayList<ParseObject>();
+        try {
+            list = query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (list.size()>0) return;
         ParseObject z = new ParseObject(UserClassName);
         z.put(UserID,a.getId());
         z.put(UserName,a.getName());
@@ -33,6 +46,7 @@ public class UserDao {
         z.saveInBackground();
    //     z.put(UserID);
     }
+
     public static void updateUserLocation(String latitude,String longitude)
     {
 
