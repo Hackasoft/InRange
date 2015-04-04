@@ -25,6 +25,7 @@ public class UserDao {
     public final static String UserMale = "UserMale";
     public final static String UserLatitude = "UserLatitude";
     public final static String UserLongitude = "UserLongitude";
+    public final static String EventId = "PlaceId";
     public static void addUser(User a)
     {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(UserClassName);
@@ -52,6 +53,42 @@ public class UserDao {
 
     public static void updateUserLocation(String latitude,String longitude)
     {
-
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(UserDao.UserClassName);
+        query.whereEqualTo(UserID, UserHolder.applicationUser);
+        List<ParseObject> list = new ArrayList<ParseObject>();
+        try {
+            list = query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (list.size() ==  1)
+        {
+          ParseObject object =  list.get(0);
+            object.put(UserLatitude,latitude);
+            object.put(UserLongitude,longitude);
+            object.saveInBackground();
+        }
+        else Log.d("DaoUpdate","fuck") ;
+    }
+    public static ArrayList<User> getUsers(String Eventid){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(UserDao.UserClassName);
+         query.whereEqualTo(UserDao.EventId, Eventid);
+        List<ParseObject> list = new ArrayList<ParseObject>();
+        ArrayList<User> users = new ArrayList<>();
+        try {
+            list = query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (list.size()!=0)
+        {
+            for (ParseObject o: list)
+            {
+                User z = new User(o);
+                users.add(z);
+            }
+            return users;
+        }
+        return users;
     }
 }

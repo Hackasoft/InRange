@@ -6,6 +6,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.hackaton.inrange.server_data.Event;
+
 
 public class MainActivity extends ActionBarActivity {
 

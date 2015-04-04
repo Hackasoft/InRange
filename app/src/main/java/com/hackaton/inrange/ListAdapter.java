@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hackaton.inrange.server_data.Event;
+
 /**
  * Created by Андрей on 04.04.2015.
  */
@@ -54,49 +56,5 @@ public class ListAdapter extends ArrayAdapter<Event> {
     }
 }
 
-class Event {
-    private String name;
-    private String description;
-    private String date;
-    private String location;
 
 
-    public Event (String name, String description, String date, String location){
-        this.setName(name);
-        this.setDescription(description);
-        this.setDate(date);
-        this.setLocation(location);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDesctiption() {
-        return description;
-    }
-
-    public void setDescription(String description){
-        this.description = description;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-}
