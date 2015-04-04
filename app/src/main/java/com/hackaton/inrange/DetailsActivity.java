@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +19,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 
 public class DetailsActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -37,6 +49,8 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
      */
     ViewPager mViewPager;
     private TextView tabTextView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +80,11 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                 actionBar.setSelectedNavigationItem(position);
             }
         });
+
+
+
+
+
 
         // For each of the sections in the app, add a tab to the action bar.
         for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
@@ -119,6 +138,14 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
+
+
+
+
+
+
+
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -139,7 +166,7 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 2;
+            return 3;
         }
 
         @Override
@@ -150,10 +177,13 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                     return getString(R.string.title_section1).toUpperCase(l);
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
+                case 2:
+                    return "Map".toUpperCase(l);
             }
             return null;
         }
     }
+
 
     /**
      * A placeholder fragment containing a simple view.
@@ -167,6 +197,12 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
 
         private TextView nameTextView;
         private TextView dateTextView;
+        GoogleMap map;
+        Marker marker;
+        GPSTracker gps;
+        CircleOptions circleOptions;
+        SupportMapFragment mapFragment;
+        final String TAG = "myLogs";
 
         /**
          * Returns a new instance of this fragment for the given section
@@ -192,7 +228,11 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
             Intent intent = getActivity().getIntent();
             String[] recievedArray = intent.getStringExtra("passData").split("\n");
 
-            switch (getArguments().getInt(ARG_SECTION_NUMBER)){
+//            SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map_fragment);
+//            map = mapFragment.getMap();
+//            init();
+
+            switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
                 case 1:
                     rootView = inflater.inflate(R.layout.details_fragment, container, false);
                     nameTextView = (TextView) rootView.findViewById(R.id.detail_name_textview);
@@ -202,25 +242,118 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                     break;
                 case 2:
                     rootView = inflater.inflate(R.layout.fragment_details, container, false);
+
+
+
+
+
+
+
+
+                    break;
+                case 3:
+                    rootView = inflater.inflate(R.layout.map_fragment, container, false);
+
+                    mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment_id);
+                    map = mapFragment.getMap();
+
+                    Log.d("SUPERTAG", "After map inflating!");
+                    if (map == null) {
+                        getActivity().finish();
+                    }
+                    init();
+                    Log.d("SUPERTAG", "After init!");
+
+
+
                     break;
                 default:
                     rootView = inflater.inflate(R.layout.fragment_details, container, false);
                     break;
             }
 
-
-
-
-
-
-
-            //View rootView = inflater.inflate(R.layout.fragment_details, container, false);
-
-            //tabTextView = (TextView) rootView.findViewById(R.id.section_label);
-            //tabTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-
+            Log.d("NOT FROM CASE", "HELLO");
             return rootView;
         }
+
+
+
+        public void init(){
+            Log.d("SUPERTAG", "INSIDE INIIT METHOD!!");
+            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    Log.d("ClickListener", "onMapClick: " + latLng.latitude + "," + latLng.longitude);
+
+                    if (marker!=null){
+                        marker.remove();
+                    }
+                    marker = map.addMarker(new MarkerOptions()
+                            .position(new LatLng(latLng.latitude,  latLng.longitude))
+                            .title(latLng.latitude + " " + latLng.longitude));
+                }
+            });
+
+            map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                @Override
+                public void onMapLongClick(LatLng latLng) {
+                    Log.d("LongClickListener", "onMapLongClick: " + latLng.latitude + "," + latLng.longitude);
+                    gps = new GPSTracker(getActivity());
+
+                    // check if GPS enabled
+                    if (gps.canGetLocation()) {
+
+                        double latitude = gps.getLatitude();
+                        double longitude = gps.getLongitude();
+
+                        if (marker != null) {
+                            marker.remove();
+                        }
+                        marker = map.addMarker(new MarkerOptions()
+                                .position(new LatLng(latitude, longitude))
+
+                                .title(latitude + " " + longitude));
+                        if (circleOptions != null) {
+                            circleOptions.visible(false);
+                        }
+                        circleOptions = new CircleOptions()
+                                .center(new LatLng(latitude, longitude))
+                                .strokeWidth(1)
+                                .strokeColor(-16711681)
+                                .radius(100);
+                        map.addCircle(circleOptions);
+
+                        CameraPosition cameraPosition = new CameraPosition.Builder()
+                                .target(new LatLng(latitude, longitude))
+                                .zoom(16)
+                                .tilt(20)
+                                .build();
+                        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+                        map.animateCamera(cameraUpdate);
+                    }
+                }
+            });
+
+            map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+
+                @Override
+                public void onCameraChange(CameraPosition camera) {
+                    Log.d(TAG, "onCameraChange: " + camera.target.latitude + "," + camera.target.longitude);
+                }
+            });
+
+        }
+
+
+
+        public void changeType(){
+            if (map.getMapType()!=GoogleMap.MAP_TYPE_SATELLITE)
+                map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+            else
+                map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        }
+
     }
 
 }
