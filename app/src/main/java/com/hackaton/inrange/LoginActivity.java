@@ -31,6 +31,8 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.Plus.PlusOptions;
 import com.google.android.gms.plus.PlusShare;
 import com.google.android.gms.plus.model.people.Person;
+import com.hackaton.inrange.server_data.User;
+import com.hackaton.inrange.server_data.UserDao;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -38,6 +40,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import static android.widget.Toast.LENGTH_LONG;
+import static android.widget.Toast.makeText;
 
 
 public class LoginActivity extends Activity implements OnClickListener,
@@ -257,7 +260,7 @@ public class LoginActivity extends Activity implements OnClickListener,
 
                         @Override
                         public void onResult(Result result) {
-                            Toast.makeText(getApplicationContext(),
+                            makeText(getApplicationContext(),
                                     "User permissions revoked",
                                     LENGTH_LONG).show();
                             mGoogleApiClient = buildGoogleAPIClient();
@@ -363,7 +366,7 @@ public class LoginActivity extends Activity implements OnClickListener,
     @Override
     public void onConnected(Bundle connectionHint) {
         mSignInClicked = false;
-        Toast.makeText(getApplicationContext(), "Signed In Successfully",
+        makeText(getApplicationContext(), "Signed In Successfully",
                 LENGTH_LONG).show();
 
         processUserInfoAndUpdateUI();
@@ -436,6 +439,8 @@ public class LoginActivity extends Activity implements OnClickListener,
                         .execute(userProfilePicUrl);
             }
 
+            User test = new User(signedInUser.getId(), userName.toString(), userName.toString(), true, 21);
+            new AddUserTask().execute(test, null, null);
 
         }
     }
@@ -481,5 +486,56 @@ public class LoginActivity extends Activity implements OnClickListener,
             }
         }
 
+    }
+    /*
+     * Background task to add users
+     *
+     *
+     */
+    public class AddUserTask extends AsyncTask<User, Void, Void> {
+
+        User userToAdd;
+
+/*
+public AddUserTask(User usr) {
+userToAdd = usr;
+}
+*/
+
+//        @Override
+//        protected Void doInBackground(User usr) {
+//            userToAdd = usr;
+//            try {
+//                UserDao.addUser(userToAdd);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute() {
+//            // TODO Auto-generated method stub
+//           makeText(this, "Added user  WOOOHOO", Toast.LENGTH_SHORT).show();
+//        }
+
+        @Override
+        protected Void doInBackground(User... users) {
+            userToAdd = users[0];
+            try {
+                UserDao.addUser(userToAdd);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            makeText(getApplicationContext(), "Added user  WOOOHOO", Toast.LENGTH_SHORT).show();
+            super.onPostExecute(aVoid);
+
+        }
     }
 }
