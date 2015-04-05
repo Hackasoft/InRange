@@ -50,27 +50,27 @@ public class MainActivity extends ActionBarActivity {
 
         mListAdapter.clear();
 
-        ArrayList<Event> list = EventDao.getAllLocation();
-        for (Event bb: list)
-        {
-            mListAdapter.add(bb);
-        }
+//        ArrayList<Event> list = EventDao.getAllLocation();
+//        for (Event bb: list)
+//        {
+//            mListAdapter.add(bb);
+//        }
 
 //        mListAdapter.addAll(EventDao.getAllLocation());
 //        Log.d("MainActivity", Integer.toString(EventDao.getAllLocation().size()));
 
-//        for (int i=0; i<5; i++){
-//
-//            mListAdapter.addAll(EventDao.getAllLocation());
-//            Log.d("MainActivity", Integer.toString(EventDao.getAllLocation().size()));
-//
-////            mListAdapter.add(new Event(
-////                    names[i],
-////                    descriptions[i],
-////                    dates[i],
-////                    locations[i]
-////            ));
-//        }
+        for (int i=0; i<5; i++){
+
+            mListAdapter.addAll(EventDao.getAllLocation());
+            Log.d("MainActivity", Integer.toString(EventDao.getAllLocation().size()));
+
+            mListAdapter.add(new Event(
+                    names[i],
+                    descriptions[i],
+                    dates[i],
+                    locations[i]
+            ));
+        }
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

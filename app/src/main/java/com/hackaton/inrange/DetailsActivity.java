@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -189,7 +190,7 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment{
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -251,14 +252,30 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                 case 3:
                     rootView = inflater.inflate(R.layout.map_fragment, container, false);
 
-                    mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment_id);
-                    map = mapFragment.getMap();
+                    //mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment_id);
+                    //mapFragment = (SupportMapFragment) SupportMapFragment.newInstance().getChildFragmentManager().findFragmentById(R.id.map_fragment);
+
+                    SupportMapFragment fragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map_fragment_id);
+
+
+
+                    if (fragment == null) {
+                        fragment = SupportMapFragment.newInstance();
+                        getChildFragmentManager().beginTransaction().add(R.id.map_layout, fragment).commit();
+                    }
+
+                    fragment.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap map) {
+                            init(map);
+                        }
+                    });
 
                     Log.d("SUPERTAG", "After map inflating!");
-                    if (map == null) {
-                        getActivity().finish();
-                    }
-                    init();
+//                    if (map == null) {
+//                        getActivity().finish();
+//                    }
+                    //init();
                     Log.d("SUPERTAG", "After init!");
                     break;
                 default:
@@ -270,7 +287,8 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
             return rootView;
         }
 
-//        @Override
+
+        //        @Override
 //        public void onDestroyView() {
 //            super.onDestroyView();
 //            FragmentManager fragmentManager = getChildFragmentManager();
@@ -280,19 +298,14 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
 //            fragmentTransaction.commit();
 //        }
 
-        public void initMap(){
-            if (!mFlagMapCreation){
-                mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment_id);
-                map = mapFragment.getMap();
-                mFlagMapCreation = true;
-            }
-
-        }
 
 
-        public void init(){
+        public void init(GoogleMap map){
             Log.d("SUPERTAG", "INSIDE INIIT METHOD!!");
-            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            final GoogleMap fMap = map;
+
+            fMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng latLng) {
                     Log.d("ClickListener", "onMapClick: " + latLng.latitude + "," + latLng.longitude);
@@ -300,13 +313,13 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                     if (marker!=null){
                         marker.remove();
                     }
-                    marker = map.addMarker(new MarkerOptions()
+                    marker = fMap.addMarker(new MarkerOptions()
                             .position(new LatLng(latLng.latitude,  latLng.longitude))
                             .title(latLng.latitude + " " + latLng.longitude));
                 }
             });
 
-            map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            fMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                 @Override
                 public void onMapLongClick(LatLng latLng) {
                     Log.d("LongClickListener", "onMapLongClick: " + latLng.latitude + "," + latLng.longitude);
@@ -321,7 +334,7 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                         if (marker != null) {
                             marker.remove();
                         }
-                        marker = map.addMarker(new MarkerOptions()
+                        marker = fMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(latitude, longitude))
 
                                 .title(latitude + " " + longitude));
@@ -333,7 +346,7 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                                 .strokeWidth(1)
                                 .strokeColor(-16711681)
                                 .radius(100);
-                        map.addCircle(circleOptions);
+                        fMap.addCircle(circleOptions);
 
                         CameraPosition cameraPosition = new CameraPosition.Builder()
                                 .target(new LatLng(latitude, longitude))
@@ -341,12 +354,12 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                                 .tilt(20)
                                 .build();
                         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
-                        map.animateCamera(cameraUpdate);
+                        fMap.animateCamera(cameraUpdate);
                     }
                 }
             });
 
-            map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            fMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
                 @Override
                 public void onCameraChange(CameraPosition camera) {
