@@ -82,20 +82,55 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         Assert.assertEquals(list.get(0).getDate(),"today");
         Assert.assertEquals(list.size(),5);
         Log.d("Events","went "+list.size());*/
+        /*ParseQuery<ParseObject> query ;
+        query = ParseQuery.getQuery(EventDao.ClassEventName);
+        List<ParseObject> list = new ArrayList<>();
+        // query.whereEqualTo("playerName", "Sean Plott");
+        //  List<ParseObject> list = new ArrayList<ParseObject>();
+        try {
+            list = query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        int counter = 0;
+        for (ParseObject zz: list)
+        {
+         //   zz.put(EventDao.EventLongitude,mas[counter]);
+         //   zz.put(EventDao.EventLatitude,mas[counter+1]);
+         //   counter+=2;
+            try {
+                zz.delete();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            zz.saveInBackground();
+        }*/
     }
     public void testEvents()
     {
-       /* Event a = new Event("Hackaton","Mobi dev","today","Donskaya str. 4A");
-        EventDao.createEvent(a);
+        String[] mas;
+        mas = new String[10];
+        mas[0] = "50.44088885831361";
+        mas[1] = "30.491079166531563";
+        mas[2] = "50.45340254389575";
+        mas[3] = "30.515038669109344";
+        mas[4] = "50.45964341812498";
+        mas[5] = "30.52483476698399";
+        mas[6] = "50.45041917621995";
+        mas[7] = "30.52467618137598";
+        mas[8] = "50.44524293390287";
+        mas[9] = "30.51675695925951";
+        Event a = new Event("Hackaton","Mobi dev","today","Donskaya str. 4A");
+        EventDao.createEvent(a,mas[0],mas[1]);
         Event b = new Event("Food festival","Sushi","tomorrow","Peremogi avn. 34");
-        EventDao.createEvent(b);
+        EventDao.createEvent(b,mas[2],mas[3]);
         Event c = new Event("Rock concert","Pink Floyd in Kiev!!","06.04.2015","Explanadna str. 1");
-        EventDao.createEvent(c);
+        EventDao.createEvent(c,mas[4],mas[5]);
         Event d = new Event("Theater drama","Some text","monday next week","Lvovska str. 321");
-        EventDao.createEvent(d);
+        EventDao.createEvent(d,mas[6],mas[7]);
         Event e = new Event("Book presentation","Book 6 \"ice and fire\"","30.04.2019","Lounge avn. 123");
-        EventDao.createEvent(e);
-        */ArrayList<Event> list = EventDao.getAllLocation();
+        EventDao.createEvent(e,mas[8],mas[9]);
+        ArrayList<Event> list = EventDao.getAllLocation();
         Assert.assertEquals(list.get(0).getDate(),"today");
         Assert.assertEquals(list.size(),5);
         Log.d("Events","went "+list.size());

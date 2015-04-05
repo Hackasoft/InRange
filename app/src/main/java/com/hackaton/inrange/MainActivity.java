@@ -3,6 +3,7 @@ package com.hackaton.inrange;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,6 +53,11 @@ public class MainActivity extends ActionBarActivity {
 // ArrayList<String> sendDataInArray = new ArrayList<String>(4);
 // String[] arrPassData = parent.getSelectedItem().toString();
                 Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+                Event event = (Event) parent.getItemAtPosition(position);
+                Log.d("Found",event.getName());
+                intent.putExtra("longtitude",event.getLongitude());
+                Log.d("Found",event.getLongitude());
+                intent.putExtra("latitude",event.getLatitude());
                 intent.putExtra("passData", mListView.getAdapter().getItem(position).toString());
                 startActivity(intent);
             }

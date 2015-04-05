@@ -31,6 +31,36 @@ public class Event {
         description = zz.getString(EventDao.EventDescription);
         date = zz.getString(EventDao.EventDate);
         location = zz.getString(EventDao.EventLocation);
+        latitude = zz.getString(EventDao.EventLatitude);
+        longitude = zz.getString(EventDao.EventLongitude);
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
     }
 
     public ArrayList<User> getUsers() {

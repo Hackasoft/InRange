@@ -26,9 +26,11 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -50,6 +52,7 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
      */
     ViewPager mViewPager;
     private TextView tabTextView;
+
 
 
 
@@ -201,6 +204,7 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
         private boolean mFlagMapCreation = false;
         GoogleMap map;
         Marker marker;
+        Marker marker1;
         GPSTracker gps;
         CircleOptions circleOptions;
         SupportMapFragment mapFragment;
@@ -217,6 +221,8 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
             fragment.setArguments(args);
             return fragment;
         }
+        double lo ;
+        double la;
 
         public PlaceholderFragment() {
         }
@@ -231,6 +237,11 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
             //container.removeView(rootView);
             Intent intent = getActivity().getIntent();
             String[] recievedArray = intent.getStringExtra("passData").split("\n");
+            String lot = intent.getStringExtra("longtitude");
+            String lat = intent.getStringExtra("latitude");
+            lo = Double.parseDouble(lot);
+             la = Double.parseDouble(lat);
+
 
 //            SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 //            map = mapFragment.getMap();
@@ -301,20 +312,33 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                     if (marker!=null){
                         marker.remove();
                     }
+                    Log.d("Found",lo + " "+ la);
                     marker = map.addMarker(new MarkerOptions()
                             .position(new LatLng(latLng.latitude,  latLng.longitude))
                             .title(latLng.latitude + " " + latLng.longitude));
+
+
                 }
             });
 
             map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                 @Override
                 public void onMapLongClick(LatLng latLng) {
-                    Log.d("LongClickListener", "onMapLongClick: " + latLng.latitude + "," + latLng.longitude);
+                    Log.d("LongClickListener", "onMapLongClick: " + lo + "," + la);
                     gps = new GPSTracker(getActivity());
+
+                    marker1 = map.addMarker(new MarkerOptions()
+                            .position(new LatLng(lo,  la))
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                            .title(la + " " + lo));
+
+
+
 
                     // check if GPS enabled
                     if (gps.canGetLocation()) {
+
+
 
                         double latitude = gps.getLatitude();
                         double longitude = gps.getLongitude();
@@ -336,13 +360,18 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                                 .radius(100);
                         map.addCircle(circleOptions);
 
-                        CameraPosition cameraPosition = new CameraPosition.Builder()
-                                .target(new LatLng(latitude, longitude))
-                                .zoom(16)
-                                .tilt(20)
-                                .build();
-                        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(
+                                new LatLngBounds(new LatLng(la, lo), new LatLng(latitude, longitude)),
+                                100);
                         map.animateCamera(cameraUpdate);
+
+//                        CameraPosition cameraPosition = new CameraPosition.Builder()
+//                                .target(new LatLng(latitude, longitude))
+//                                .zoom(16)
+//                                .tilt(20)
+//                                .build();
+//                        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+//                        map.animateCamera(cameraUpdate);
                     }
                 }
             });
