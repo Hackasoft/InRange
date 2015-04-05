@@ -16,6 +16,8 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.hackaton.inrange.server_data.UserDao;
+
 public class GPSTracker extends Service implements LocationListener {
 
     private final Context mContext;
@@ -106,6 +108,7 @@ public class GPSTracker extends Service implements LocationListener {
     }
     @Override
     public void onLocationChanged(Location location) {
+        UserDao.updateUserLocation(""+location.getLatitude(), ""+location.getLongitude());
     }
 
     @Override
