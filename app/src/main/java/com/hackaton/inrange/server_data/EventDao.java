@@ -21,7 +21,7 @@ public class EventDao {
     public static ArrayList<Event> getAllLocation()
     {
         ParseObject object = new ParseObject(ClassEventName);
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(UserDao.UserClassName);
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(ClassEventName);
         List<ParseObject> list = new ArrayList<ParseObject>();
         ArrayList<Event> events = new ArrayList<>();
         try {

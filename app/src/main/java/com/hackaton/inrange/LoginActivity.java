@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.makeText;
@@ -440,8 +441,15 @@ public class LoginActivity extends Activity implements OnClickListener,
             }
 
             User test = new User(signedInUser.getId(), userName.toString(), userName.toString(), true, 21);
-            new AddUserTask().execute(test, null, null);
-
+           AddUserTask task =  new AddUserTask();
+            task.execute(test, null, null);
+            try {
+                Void a = task.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
         }
     }
 

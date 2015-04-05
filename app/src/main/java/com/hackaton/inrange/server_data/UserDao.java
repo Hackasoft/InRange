@@ -91,4 +91,24 @@ public class UserDao {
         }
         return users;
     }
+    public static ArrayList<User> getAllUsers(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(UserDao.UserClassName);
+        List<ParseObject> list = new ArrayList<ParseObject>();
+        ArrayList<User> users = new ArrayList<>();
+        try {
+            list = query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (list.size()!=0)
+        {
+            for (ParseObject o: list)
+            {
+                User z = new User(o);
+                users.add(z);
+            }
+            return users;
+        }
+        return users;
+    }
 }

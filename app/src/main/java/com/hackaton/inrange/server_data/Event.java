@@ -13,6 +13,8 @@ public class Event {
     private String description;
     private String date;
     private String location;
+    private String longitude;
+    private String latitude;
     private ArrayList<User> users;
 
     public Event (String name, String description, String date, String location){
@@ -69,5 +71,10 @@ public class Event {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    @Override
+    public String toString() {
+        return getName() + '\n' + getDate() + '\n' + getLocation();
     }
 }

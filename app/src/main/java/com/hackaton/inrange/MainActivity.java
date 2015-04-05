@@ -7,6 +7,9 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.hackaton.inrange.server_data.Event;
+import com.hackaton.inrange.server_data.EventDao;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -35,14 +38,19 @@ public class MainActivity extends ActionBarActivity {
         mListView.setAdapter(mListAdapter);
 
         mListAdapter.clear();
-        for (int i=0; i<5; i++){
+        ArrayList<Event> list = EventDao.getAllLocation();
+        for (Event bb: list)
+        {
+            mListAdapter.add(bb);
+        }
+       /* for (int i=0; i<5; i++){
             mListAdapter.add(new Event(
                     names[i],
                     descriptions[i],
                     dates[i],
                     locations[i]
             ));
-        }
+        }*/
     }
 
 
