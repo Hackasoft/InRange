@@ -3,11 +3,17 @@ package com.hackaton.inrange;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.hackaton.inrange.server_data.Event;
+import com.hackaton.inrange.server_data.EventDao;
+import com.hackaton.inrange.server_data.UserDao;
+import com.parse.Parse;
 
 import java.util.ArrayList;
 
@@ -21,6 +27,7 @@ public class MainActivity extends ActionBarActivity {
 
     private ListView mListView;
     private ListAdapter mListAdapter;
+    private UserDao mUserDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +44,33 @@ public class MainActivity extends ActionBarActivity {
 
         mListView.setAdapter(mListAdapter);
 
+        Parse.initialize(this,
+                "GjPjY5gSyazmxQQ5Z0zqymhE9zPfPyUhIZj6UWQy",
+                "8DLjAS0SbDNyPnL1stvBjr98sFnOXcwpx2XSahjP");
+
         mListAdapter.clear();
-        for (int i=0; i<5; i++){
-            mListAdapter.add(new Event(
-                    names[i],
-                    descriptions[i],
-                    dates[i],
-                    locations[i]
-            ));
+
+        ArrayList<Event> list = EventDao.getAllLocation();
+        for (Event bb: list)
+        {
+            mListAdapter.add(bb);
         }
+
+//        mListAdapter.addAll(EventDao.getAllLocation());
+//        Log.d("MainActivity", Integer.toString(EventDao.getAllLocation().size()));
+
+//        for (int i=0; i<5; i++){
+//
+//            mListAdapter.addAll(EventDao.getAllLocation());
+//            Log.d("MainActivity", Integer.toString(EventDao.getAllLocation().size()));
+//
+////            mListAdapter.add(new Event(
+////                    names[i],
+////                    descriptions[i],
+////                    dates[i],
+////                    locations[i]
+////            ));
+//        }
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

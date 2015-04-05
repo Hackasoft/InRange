@@ -223,8 +223,10 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
+
                                  Bundle savedInstanceState) {
 
+            //savedInstanceState = null;
             View rootView;
 
 
@@ -245,22 +247,12 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                     break;
                 case 2:
                     rootView = inflater.inflate(R.layout.fragment_details, container, false);
-
-
-
-
-
-
-
-
                     break;
                 case 3:
                     rootView = inflater.inflate(R.layout.map_fragment, container, false);
 
                     mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment_id);
-
                     map = mapFragment.getMap();
-//                    initMap();
 
                     Log.d("SUPERTAG", "After map inflating!");
                     if (map == null) {
@@ -268,9 +260,6 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                     }
                     init();
                     Log.d("SUPERTAG", "After init!");
-
-
-
                     break;
                 default:
                     rootView = inflater.inflate(R.layout.fragment_details, container, false);
@@ -280,6 +269,16 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
             Log.d("NOT FROM CASE", "HELLO");
             return rootView;
         }
+
+//        @Override
+//        public void onDestroyView() {
+//            super.onDestroyView();
+//            FragmentManager fragmentManager = getChildFragmentManager();
+//            SupportMapFragment supportMapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.map_fragment_id);
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            fragmentTransaction.remove(supportMapFragment);
+//            fragmentTransaction.commit();
+//        }
 
         public void initMap(){
             if (!mFlagMapCreation){

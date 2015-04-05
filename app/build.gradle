@@ -20,13 +20,13 @@ android {
 
     signingConfigs {
         release {
-            storeFile file("C:\\Hackasoft\\InRange\\hack.keystore")
+            storeFile file("C:\\HackasoftReborn\\InRange\\InRange\\hack.keystore")
             storePassword "android"
             keyAlias "hack"
             keyPassword "android"
         }
         debug {
-            storeFile file("C:\\Hackasoft\\InRange\\hack.keystore")
+            storeFile file("C:\\HackasoftReborn\\InRange\\InRange\\hack.keystore")
             storePassword "android"
             keyAlias "hack"
             keyPassword "android"
