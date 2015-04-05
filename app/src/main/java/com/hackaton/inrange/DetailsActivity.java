@@ -328,7 +328,7 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                     gps = new GPSTracker(getActivity());
 
                     marker1 = map.addMarker(new MarkerOptions()
-                            .position(new LatLng(lo,  la))
+                            .position(new LatLng(la,  lo))
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                             .title(la + " " + lo));
 
@@ -360,18 +360,18 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                                 .radius(100);
                         map.addCircle(circleOptions);
 
-                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(
-                                new LatLngBounds(new LatLng(la, lo), new LatLng(latitude, longitude)),
-                                100);
-                        map.animateCamera(cameraUpdate);
-
-//                        CameraPosition cameraPosition = new CameraPosition.Builder()
-//                                .target(new LatLng(latitude, longitude))
-//                                .zoom(16)
-//                                .tilt(20)
-//                                .build();
-//                        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+//                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(
+//                                new LatLngBounds(new LatLng(la, lo), new LatLng(latitude, longitude)),
+//                                100);
 //                        map.animateCamera(cameraUpdate);
+
+                        CameraPosition cameraPosition = new CameraPosition.Builder()
+                                .target(new LatLng(latitude, longitude))
+                                .zoom(13)
+                                .tilt(20)
+                                .build();
+                        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+                        map.animateCamera(cameraUpdate);
                     }
                 }
             });
