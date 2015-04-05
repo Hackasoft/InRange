@@ -78,10 +78,10 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
             e.printStackTrace();
         }
         Log.d("UserDao_add","After2"+list.size());*/
-        ArrayList<Event> list = EventDao.getAllLocation();
+        /*ArrayList<Event> list = EventDao.getAllLocation();
         Assert.assertEquals(list.get(0).getDate(),"today");
         Assert.assertEquals(list.size(),5);
-        Log.d("Events","went "+list.size());
+        Log.d("Events","went "+list.size());*/
     }
     public void testEvents()
     {
