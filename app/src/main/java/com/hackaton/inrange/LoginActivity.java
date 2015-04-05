@@ -33,6 +33,7 @@ import com.google.android.gms.plus.PlusShare;
 import com.google.android.gms.plus.model.people.Person;
 import com.hackaton.inrange.server_data.User;
 import com.hackaton.inrange.server_data.UserDao;
+import com.hackaton.inrange.server_data.UserHolder;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -440,9 +441,9 @@ public class LoginActivity extends Activity implements OnClickListener,
                         .execute(userProfilePicUrl);
             }
 
-            User test = new User(signedInUser.getId(), userName.toString(), userName.toString(), true, 21);
+             UserHolder.applicationUser = new User(signedInUser.getId(), userName.toString(), userName.toString(), true, 21);
            AddUserTask task =  new AddUserTask();
-            task.execute(test, null, null);
+            task.execute(UserHolder.applicationUser, null, null);
             try {
                 Void a = task.get();
             } catch (InterruptedException e) {
