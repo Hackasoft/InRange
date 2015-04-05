@@ -13,6 +13,8 @@ public class Event {
     private String description;
     private String date;
     private String location;
+    private String longitude;
+    private String latitude;
     private ArrayList<User> users;
 
     public Event (String name, String description, String date, String location){
@@ -29,11 +31,36 @@ public class Event {
         description = zz.getString(EventDao.EventDescription);
         date = zz.getString(EventDao.EventDate);
         location = zz.getString(EventDao.EventLocation);
+        latitude = zz.getString(EventDao.EventLatitude);
+        longitude = zz.getString(EventDao.EventLongitude);
     }
 
-    @Override
-    public String toString() {
-        return getName() + '\n' + getDate() + '\n' + getLocation();
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
     }
 
     public ArrayList<User> getUsers() {
@@ -74,5 +101,10 @@ public class Event {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    @Override
+    public String toString() {
+        return getName() + '\n' + getDate() + '\n' + getLocation();
     }
 }

@@ -17,7 +17,7 @@ import bolts.Task;
  * Created by Boris on 04.04.2015.
  */
 public class UserDao {
-    public final static String UserClassName = "Users";
+    public final static String UserClassName = "Users2";
     public final static String UserID = "userid";
     public final static String UserName = "userName";
     public final static String UserLastName = "UserLastName";
@@ -25,6 +25,7 @@ public class UserDao {
     public final static String UserMale = "UserMale";
     public final static String UserLatitude = "UserLatitude";
     public final static String UserLongitude = "UserLongitude";
+    public final static String EventId = "PlaceId";
     public static void addUser(User a)
     {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(UserClassName);
@@ -45,6 +46,7 @@ public class UserDao {
         z.put(UserMale,a.isMale());
         z.put(UserLatitude,a.getUserLatitude());
         z.put(UserLongitude,a.getUserLongitude());
+        z.put(EventId,a.getEventId());
         z.saveInBackground();
         Log.d("ran","good2");
    //     z.put(UserID);
@@ -52,6 +54,83 @@ public class UserDao {
 
     public static void updateUserLocation(String latitude,String longitude)
     {
-
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(UserDao.UserClassName);
+        query.whereEqualTo(UserID, UserHolder.applicationUser);
+        List<ParseObject> list = new ArrayList<ParseObject>();
+        try {
+            list = query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (list.size() ==  1)
+        {
+          ParseObject object =  list.get(0);
+            object.put(UserLatitude,latitude);
+            object.put(UserLongitude,longitude);
+            object.saveInBackground();
+        }
+        else Log.d("DaoUpdate","fuck") ;
+    }
+    public static ArrayList<User> getUsers(String Eventid){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(UserDao.UserClassName);
+         query.whereEqualTo(UserDao.EventId, Eventid);
+        Log.d("Went","eventId "+Eventid);
+        List<ParseObject> list = new ArrayList<ParseObject>();
+        ArrayList<User> users = new ArrayList<>();
+        try {
+            list = query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (list.size()!=0)
+        {
+            for (ParseObject o: list)
+            {
+                User z = new User(o);
+                users.add(z);
+            }
+            return users;
+        }
+        return users;
+    }
+    public static void updateUserEvent(Event event)
+    {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(UserDao.UserClassName);
+        query.whereEqualTo(UserDao.UserID,UserHolder.applicationUser.getId() );
+        UserHolder.events.add(event);
+        List<ParseObject> list = new ArrayList<ParseObject>();
+      //  ArrayList<User> users = new ArrayList<>();
+        try {
+            list = query.find();
+            Log.d("Went"," hasid" + list.size());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (list.size() == 1)
+        {
+            Log.d("Went"," wentto");
+          list.get(0).put(UserDao.EventId,event.getId());
+            list.get(0).fetchInBackground();
+        }
+    }
+    public static ArrayList<User> getAllUsers(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(UserDao.UserClassName);
+        List<ParseObject> list = new ArrayList<ParseObject>();
+        ArrayList<User> users = new ArrayList<>();
+        try {
+            list = query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (list.size()!=0)
+        {
+            for (ParseObject o: list)
+            {
+                User z = new User(o);
+                users.add(z);
+            }
+            return users;
+        }
+        return users;
     }
 }

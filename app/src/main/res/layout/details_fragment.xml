@@ -55,6 +55,12 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/detail_i_go_button"
+            android:text="I'll go!"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
 

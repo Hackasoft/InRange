@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,11 +34,13 @@ import com.google.android.gms.plus.PlusShare;
 import com.google.android.gms.plus.model.people.Person;
 import com.hackaton.inrange.server_data.User;
 import com.hackaton.inrange.server_data.UserDao;
+import com.hackaton.inrange.server_data.UserHolder;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.makeText;
@@ -82,7 +85,8 @@ public class LoginActivity extends Activity implements OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
+        //findViewById(R.id.sign_in_button).setOnClickListener(this);
+
         signOutButton = (Button) findViewById(R.id.sign_out_button);
         signOutButton.setOnClickListener(this);
         userInfoButton = (Button) findViewById(R.id.show_userinfo_button);
@@ -166,7 +170,9 @@ public class LoginActivity extends Activity implements OnClickListener,
         int id = v.getId();
         switch (id) {
             case R.id.sign_in_button:
-                processSignIn();
+              //  processSignIn();
+                Intent a = new Intent(LoginActivity.this, MainActivity2.class);
+                startActivity(a);
                 break;
             case R.id.sign_out_button:
                 processSignOut();
@@ -373,10 +379,10 @@ public class LoginActivity extends Activity implements OnClickListener,
 
         processUIUpdate(true);
 
-        Intent startMainActivity = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(startMainActivity);
+//        Intent startMainActivity = new Intent(LoginActivity.this, MainActivity.class);
+//        startActivity(startMainActivity);
 
-        finish();
+      //  finish();
 
     }
 
@@ -394,6 +400,7 @@ public class LoginActivity extends Activity implements OnClickListener,
      */
     private void processUserInfoAndUpdateUI() {
         Person signedInUser = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+      // if (signedInUser == null)  Log.d("Went","11" + signedInUser.getName());
         if (signedInUser != null) {
 
             if (signedInUser.hasDisplayName()) {
@@ -438,9 +445,19 @@ public class LoginActivity extends Activity implements OnClickListener,
                 new UpdateProfilePicTask(userProfilePic)
                         .execute(userProfilePicUrl);
             }
-
-            User test = new User(signedInUser.getId(), userName.toString(), userName.toString(), true, 21);
-            new AddUserTask().execute(test, null, null);
+            Log.d("Went","12" + signedInUser.getId());
+            UserHolder.applicationUser = new User(signedInUser.getId(), userName.toString(), userName.toString(), true, 21);
+            AddUserTask task =  new AddUserTask();
+            UserDao.addUser(UserHolder.applicationUser);
+            Log.d("Went","initialized");
+          /*  task.execute(UserHolder.applicationUser, null, null);
+            try {
+                Void a = task.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }*/
 
         }
     }
@@ -525,6 +542,7 @@ userToAdd = usr;
             userToAdd = users[0];
             try {
                 UserDao.addUser(userToAdd);
+                Log.d("Went","initialized");
             } catch (Exception e) {
                 e.printStackTrace();
             }

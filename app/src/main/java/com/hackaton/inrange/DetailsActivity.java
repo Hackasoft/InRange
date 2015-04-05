@@ -1,5 +1,6 @@
 package com.hackaton.inrange;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import android.content.Intent;
@@ -19,6 +20,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,11 +31,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.hackaton.inrange.server_data.User;
+import com.hackaton.inrange.server_data.Event;
+import com.hackaton.inrange.server_data.EventDao;
+import com.hackaton.inrange.server_data.UserDao;
+import com.squareup.picasso.Picasso;
 
 
 public class DetailsActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -54,12 +64,13 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        tabTextView = (TextView) findViewById(R.id.section_label);
+        //tabTextView = (TextView) findViewById(R.id.section_label);
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
@@ -198,8 +209,15 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
         private static final String ARG_SECTION_NUMBER = "section_number";
 
         private TextView nameTextView;
+        private ImageView imageView;
         private TextView dateTextView;
+        private ListView personListView;
+        private Button mButton;
         private boolean mFlagMapCreation = false;
+        private PersonAdapter personAdapter;
+        private String la;
+        private String lo;
+        Marker marker1;
         GoogleMap map;
         Marker marker;
         GPSTracker gps;
@@ -234,6 +252,9 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
             //container.removeView(rootView);
             Intent intent = getActivity().getIntent();
             String[] recievedArray = intent.getStringExtra("passData").split("\n");
+            la = intent.getStringExtra("latitude");
+            lo = intent.getStringExtra("longtitude");
+
 
 //            SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map_fragment);
 //            map = mapFragment.getMap();
@@ -245,9 +266,31 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                     dateTextView = (TextView) rootView.findViewById(R.id.detail_date_textview);
                     nameTextView.setText(recievedArray[0]);
                     dateTextView.setText(recievedArray[1]);
+                    imageView = (ImageView) rootView.findViewById(R.id.detail_main_pic_imageview);
+
+                    Picasso.with(getActivity()).load(intent.getStringExtra("pic")).into(imageView);
+                    mButton = (Button) rootView.findViewById(R.id.detail_i_go_button);
+
+                    mButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            UserDao.updateUserEvent(MainActivity.passedEvent);
+                        }
+                    });
                     break;
                 case 2:
                     rootView = inflater.inflate(R.layout.fragment_details, container, false);
+                    personListView = (ListView) rootView.findViewById(R.id.person_list);
+                    personAdapter = new PersonAdapter(getActivity(), R.id.list_item);
+
+                    ArrayList<User> list = UserDao.getUsers(MainActivity.passedEvent.getId());
+                    Log.d("Went"," "+list.size());
+                    for (User bb: list)
+                    {
+                        personAdapter.add(bb);
+                    }
+
+                    personListView.setAdapter(personAdapter);
                     break;
                 case 3:
                     rootView = inflater.inflate(R.layout.map_fragment, container, false);
@@ -322,11 +365,21 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
             fMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
                 @Override
                 public void onMapLongClick(LatLng latLng) {
-                    Log.d("LongClickListener", "onMapLongClick: " + latLng.latitude + "," + latLng.longitude);
+                    Log.d("LongClickListener", "onMapLongClick: " + lo + "," + la);
                     gps = new GPSTracker(getActivity());
+
+                    marker1 = fMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(Double.parseDouble(la),  Double.parseDouble(lo)))
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                            .title(la + " " + lo));
+
+
+
 
                     // check if GPS enabled
                     if (gps.canGetLocation()) {
+
+
 
                         double latitude = gps.getLatitude();
                         double longitude = gps.getLongitude();
@@ -348,9 +401,14 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                                 .radius(100);
                         fMap.addCircle(circleOptions);
 
+//                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(
+//                                new LatLngBounds(new LatLng(la, lo), new LatLng(latitude, longitude)),
+//                                100);
+//                        map.animateCamera(cameraUpdate);
+
                         CameraPosition cameraPosition = new CameraPosition.Builder()
                                 .target(new LatLng(latitude, longitude))
-                                .zoom(16)
+                                .zoom(13)
                                 .tilt(20)
                                 .build();
                         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
@@ -358,6 +416,7 @@ public class DetailsActivity extends ActionBarActivity implements ActionBar.TabL
                     }
                 }
             });
+
 
             fMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 

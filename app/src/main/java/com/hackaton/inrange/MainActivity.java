@@ -25,9 +25,17 @@ public class MainActivity extends ActionBarActivity {
     private String[] dates;
     private String[] locations;
 
+    private String[] imgThubs = {"http://www.brunels-old-station.co.uk/shopimages/Food-Festival.jpg",
+        "http://www.theparentreport.com/wp-content/uploads/2013/08/RockConcert.jpg",
+        "http://media.lvivalive.com/uploads/2011/12/maria-zankovetska-ukrainian-national-drama-theater-performance-scene.jpg",
+        "http://ih.constantcontact.com/fs142/1102609499039/img/1762.jpg",
+        "https://blog.hackerrank.com/wp-content/uploads/2015/01/hackny-hackathon-fall-2010-flickr-photo-sharing1.jpg"};
+
     private ListView mListView;
     private ListAdapter mListAdapter;
     private UserDao mUserDao;
+
+    public static Event passedEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +48,7 @@ public class MainActivity extends ActionBarActivity {
         locations = this.getResources().getStringArray(R.array.places);
 
         mListView = (ListView) findViewById(R.id.main_activity_list);
-        mListAdapter = new ListAdapter(this,R.id.list_item);
+        mListAdapter = new ListAdapter(this,R.id.list_item, imgThubs);
 
         mListView.setAdapter(mListAdapter);
 
@@ -50,27 +58,27 @@ public class MainActivity extends ActionBarActivity {
 
         mListAdapter.clear();
 
-//        ArrayList<Event> list = EventDao.getAllLocation();
-//        for (Event bb: list)
-//        {
-//            mListAdapter.add(bb);
-//        }
+        ArrayList<Event> list = EventDao.getAllLocation();
+        for (Event bb: list)
+        {
+            mListAdapter.add(bb);
+        }
 
 //        mListAdapter.addAll(EventDao.getAllLocation());
 //        Log.d("MainActivity", Integer.toString(EventDao.getAllLocation().size()));
 
-        for (int i=0; i<5; i++){
-
-            mListAdapter.addAll(EventDao.getAllLocation());
-            Log.d("MainActivity", Integer.toString(EventDao.getAllLocation().size()));
-
-            mListAdapter.add(new Event(
-                    names[i],
-                    descriptions[i],
-                    dates[i],
-                    locations[i]
-            ));
-        }
+//        for (int i=0; i<5; i++){
+//
+//            mListAdapter.addAll(EventDao.getAllLocation());
+//            Log.d("MainActivity", Integer.toString(EventDao.getAllLocation().size()));
+//
+//            mListAdapter.add(new Event(
+//                    names[i],
+//                    descriptions[i],
+//                    dates[i],
+//                    locations[i]
+//            ));
+//        }
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -78,7 +86,17 @@ public class MainActivity extends ActionBarActivity {
 //                ArrayList<String> sendDataInArray = new ArrayList<String>(4);
 //                String[] arrPassData = parent.getSelectedItem().toString();
                 Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+
+                Event event = (Event) parent.getItemAtPosition(position);
+
+                passedEvent = event;
+
+                intent.putExtra("longtitude",event.getLongitude());
+                intent.putExtra("pic", imgThubs[position]);
+                Log.d("Found",event.getLongitude());
+                intent.putExtra("latitude",event.getLatitude());
                 intent.putExtra("passData", mListView.getAdapter().getItem(position).toString());
+
                 startActivity(intent);
             }
         });

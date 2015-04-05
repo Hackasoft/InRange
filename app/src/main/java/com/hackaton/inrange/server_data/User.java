@@ -1,5 +1,7 @@
 package com.hackaton.inrange.server_data;
 
+import com.parse.ParseObject;
+
 /**
  * Created by Boris on 04.04.2015.
  */
@@ -11,10 +13,20 @@ public class User {
     private int age;
     private String userLongitude ;
     private String userLatitude;
+    private String EventId;
 
     public User() {
         userLatitude = "";
         userLatitude = "";
+        EventId = "";
+    }
+
+    public String getEventId() {
+        return EventId;
+    }
+
+    public void setEventId(String eventId) {
+        EventId = eventId;
     }
 
     public User(String id, String name, String lastName, boolean male, int age) {
@@ -25,6 +37,18 @@ public class User {
         this.age = age;
         userLatitude = "";
         userLongitude = "";
+        EventId = "";
+    }
+    public User(ParseObject b)
+    {
+        id = b.getString(UserDao.UserID);
+        name = b.getString(UserDao.UserName);
+        lastName = b.getString(UserDao.UserLastName);
+        userLatitude = b.getString(UserDao.UserLatitude);
+        userLongitude = b.getString(UserDao.UserLongitude);
+        male = b.getBoolean(UserDao.UserMale);
+        age = b.getInt(UserDao.UserAge);
+        EventId = b.getString(UserDao.EventId);
     }
 
     public String getId() {

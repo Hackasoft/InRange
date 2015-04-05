@@ -9,47 +9,40 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hackaton.inrange.server_data.Event;
-import com.squareup.picasso.Picasso;
+import com.hackaton.inrange.server_data.User;
 
 /**
  * Created by Андрей on 04.04.2015.
  */
-public class ListAdapter extends ArrayAdapter<Event> {
+public class PersonAdapter extends ArrayAdapter<User> {
     private Context mContext;
     private int mResource;
-    private String[] mThubs;
 
-    public ListAdapter(Context context, int resource, String[] mThubs) {
+    public PersonAdapter(Context context, int resource) {
         super(context,resource);
         this.mContext = context;
         this.mResource = resource;
-        this.mThubs = mThubs;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Event event = getItem(position);
+        //Event event = getItem(position);
+        User user = getItem(position);
 
         View viewHolder = null;
         if (convertView == null) {
             convertView = LayoutInflater
                     .from(getContext())
-                    .inflate(R.layout.main_activity_list_item, null);
+                    .inflate(R.layout.person_list_item, null);
         }
 
         ImageView imageView = (ImageView) convertView
-                .findViewById(R.id.event_pic_list_item_imageview);
+                .findViewById(R.id.person_list_item_imageview);
 
-        Picasso.with(mContext).load(mThubs[position]).into(imageView);
+        imageView.setImageResource(R.drawable.male);
 
-        ((TextView) convertView.findViewById(R.id.event_name_list_item_textview))
-                .setText(event.getName());
-        ((TextView) convertView.findViewById(R.id.event_short_description_list_item_textview))
-                .setText(event.getDesctiption());
-        ((TextView) convertView.findViewById(R.id.event_date_list_item_textview))
-                .setText(event.getDate());
-        ((TextView) convertView.findViewById(R.id.event_distance_list_item_textview))
-                .setText(event.getLocation());
+        ((TextView) convertView.findViewById(R.id.person_list_item_textview))
+                .setText(user.getName());
 
         //new TaskDownloadImage(imageView).execute(recentTrack.trackImageURL);
         //new DownloadImageLoader(context, imageView, recentTrack.trackImageURL).forceLoad();
